@@ -1,0 +1,42 @@
+package controllers;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.OutputStream;
+import java.io.FileOutputStream;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+
+@WebServlet("/media-List-Image")
+public class MediaListImageControllerServlet extends HttpServlet {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		response.setContentType("image/jpg");
+		String mediaId = (String)request.getAttribute("id");
+		String commonPath = super.getInitParameter("commonPath");
+		String actualPath = commonPath+"\\"+mediaId+"\\image.jpg";
+		
+//		try {
+			
+			InputStream inputStream = new FileInputStream(actualPath);
+			
+			
+			OutputStream outputStream = response.getOutputStream(); // returns ServletOutputStream object - to write binary data
+			
+			int ch;
+			
+			while((ch = inputStream.read()) != -1) {
+				
+				outputStream.write(ch);
+				
+			}
+
+	}
+
+}

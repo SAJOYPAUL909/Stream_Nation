@@ -1,0 +1,98 @@
+package dao;
+import util.DBConnection;
+
+import dto.Media;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.ResultSet;
+
+public class StoreMediaDao {
+
+	private static PreparedStatement ps1;
+	private static PreparedStatement ps2;
+	
+	static {
+		
+		try{
+			
+			ps1 = DBConnection.getConnection().prepareStatement("insert into media (media_id, category, name) values (?, ?, ?)");
+			ps2 = DBConnection.getConnection().prepareStatement("select * from media limit ? offset ?");
+			
+		}
+		catch(SQLException sq) {
+			
+			System.out.println("static - StoreMediaDao");
+			sq.printStackTrace();
+			
+		}
+		
+	}
+	
+	public static List<Media> getMediaLimitOffset(int limit, int offset) throws SQLException {
+		
+		ps2.setInt(1, limit);
+		ps2.setInt(2, offset);
+		
+		ResultSet rs = ps2.executeQuery();
+		
+		List<Media> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			
+			Media media = new Media();
+			media.setMedia_id(rs.getString(1));
+			media.setCategory(rs.getString(2));
+			media.setName(rs.getString(3));
+			
+			list.add(media);
+		}
+		
+		return list;
+		
+	}
+	
+public static List<Media> getMediaLimitOffset(int limit, int offset) throws SQLException {
+		
+		ps2.setInt(1, limit);
+		ps2.setInt(2, offset);
+		
+		ResultSet rs = ps2.executeQuery();
+		
+		List<Media> list = new ArrayList<>();
+		
+		while(rs.next()) {
+			
+			Media media = new Media();
+			media.setMedia_id(rs.getString(1));
+			media.setCategory(rs.getString(2));
+			media.setName(rs.getString(3));
+			
+			list.add(media);
+		}
+		
+		return list;
+		
+	}
+	
+	
+	public static boolean storeMedia(Media media) throws SQLException{
+		
+		ps1.setString(1, media.getMedia_id());
+		ps1.setString(2, media.getCategory());
+		ps1.setString(3, media.getName());
+		
+		int a = ps1.executeUpdate();
+		
+		if(a > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+		
+	}
+	
+	
+}

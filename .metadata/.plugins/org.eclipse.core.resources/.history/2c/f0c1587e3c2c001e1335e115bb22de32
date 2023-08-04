@@ -1,0 +1,111 @@
+package controllers;
+
+import java.io.File;
+import java.io.IOException;
+import dto.Media;
+import dto.MediaInfo;
+import dao.StoreMediaDao;
+import dao.StoreMediaInformationDao;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
+import java.util.List;
+import java.util.UUID;
+import java.util.Date;
+
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.FileItem;
+import java.text.SimpleDateFormat;
+
+
+@WebServlet("/upload-media-info")
+public class UploadMediaInfoControllerServlet extends HttpServlet {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		
+		String name = request.getAttribute("name");
+		String category = request.getParameter("category");
+		String strRating = request.getParameter("ratings");
+		String strLength = request.getParameter("length");
+		String description = request.getParameter("description");
+		String directorName = request.getParameter("directorName");
+		String actors = request.getParameter("actors");
+		String strReleaseDate = request.getParameter("releaseDate");
+		String mediaId = null;
+		System.out.println(name+" , "+category+" , "+strRating+" , "+strLength+" , "+description+" , "+directorName+" , "+actors+" , "+strReleaseDate+" , "+mediaId);
+		System.out.println("ServletFileUpload.isMultipartContent(request) = "+ServletFileUpload.isMultipartContent(request));
+		if(ServletFileUpload.isMultipartContent(request)) {
+			FileItemFactory factory = new DiskFileItemFactory();
+			ServletFileUpload upload = new ServletFileUpload(factory);
+			System.out.println("factory = "+factory+" , "+"uplaod = "+upload);
+			try {
+				List<FileItem> items = upload.parseRequest(request);
+				for(FileItem item : items) {
+					
+					if(item.isFormField() == false) {
+						
+						String contentType = item.getContentType();
+						String fileName = null;
+						System.out.println("contentType = "+contentType);
+						
+						if(contentType.startsWith("image/")) {
+							fileName = "image.jpg";
+						}
+						else if(contentType.startsWith("video/")) {
+							fileName= "video.mp4";
+						}
+						
+						ServletContext sc = request.getServletContext();
+						String commonPath = sc.getInitParameter("commonPath");
+						UUID uuid = UUID.randomUUID();
+						String actualPath = commonPath+File.separator+uuid+File.separator+fileName;
+						System.out.println("actualPath = "+actualPath);
+						
+						File storeFile = new File(actualPath);
+						
+						item.write(storeFile);
+						
+						mediaId = uuid.toString();
+						
+					}
+					
+				}
+				
+				Media media = new Media(mediaId, category, name);
+				StoreMediaDao.storeMedia(media);
+				
+				SimpleDateFormat dateFormatter = new  SimpleDateFormat("dd-mm-yyyy");
+				Date utilReleaseDate = dateFormatter.parse(strReleaseDate);
+				long miliseconds = utilReleaseDate.getTime();
+				java.sql.Date sqlReleaseDate = new java.sql.Date(miliseconds);
+				System.out.println(sqlReleaseDate);
+				
+				SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss");
+				Date utilCurrentDate = timeFormatter.parse(strLength);
+				miliseconds = utilCurrentDate.getTime();
+				java.sql.Time sqlLength = new java.sql.Time(miliseconds);
+				System.out.println(sqlLength);
+				
+				float rating = Float.parseFloat(strRating);
+				
+				MediaInfo mediaInfo = new MediaInfo(mediaId, rating, sqlLength, description, sqlReleaseDate, directorName, actors);
+				StoreMediaInformationDao.insertMediaInformation(mediaInfo);
+				
+			}
+			catch(Exception e) {
+				System.out.println("UploadMediaInfoControllerServlet");
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+
+
+}

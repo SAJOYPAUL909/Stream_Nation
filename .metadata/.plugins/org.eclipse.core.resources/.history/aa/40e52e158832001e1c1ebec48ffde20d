@@ -1,0 +1,67 @@
+package custometags;
+
+import java.util.List;
+import dto.Media;
+import javax.servlet.jsp.JspContext;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.JspException;
+import java.io.IOException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+public class PrintMediaListToJsp extends SimpleTagSupport {
+
+	private List<Media> list;
+
+	public void setList(List<Media> list) {
+		this.list = list;
+	}
+
+	@Override
+	public void doTag() throws JspException, IOException {
+
+		JspContext jc = super.getJspContext();
+		JspWriter out = jc.getOut();
+
+		
+		out.println("<ul class='list-group rounded'>");
+		 
+			 for(Media media : list) {
+			 
+				 String id = media.getMedia_id();
+				 
+				 String servletSrc = "media-List-Image?id="+id;
+				 
+				 out.println("<img class='rounded' width='500px' src='"+servletSrc+"'/>");
+				 out.println("<li class='list-group-item fontOne bg-dark text-light'>"+media.
+				 getName()+"</li>");
+				 out.println("<li class='list-group-item fontOne bg-dark text-light'>"+media.
+				 getCategory()+"</li>");
+				 out.println("<li class='list-group-item mb-5 fontOne rounded-bottom text-light bg-dark'><button class='btn btn-outline-light btn-sm'>More Details</button></li>"
+						 
+			 );
+		 
+		 
+		 }
+		 
+		 out.println("</ul>");
+		 
+
+		
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

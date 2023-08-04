@@ -1,0 +1,111 @@
+<%@ page import="java.util.List, dto.Media" language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    
+<%@ taglib uri="/WEB-INF/tag.tld" prefix="mytag"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Show all Media</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,900;1,100;1,200;1,400;1,900&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<style>
+
+	#mainBox{
+		height: 350vh;
+		width: 100vw;
+		background-image: url(images/bluredadmin.jpg);
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+	.shadow{
+		box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+	}
+	
+	.fontOne {
+	  font-family: 'Montserrat', sans-serif;
+	  font-style: italic;
+	  font-weight: 400;
+	}
+
+</style>
+</head>
+
+
+<body>
+
+	<%
+	
+		request.setAttribute("visitToJsp", "true");
+	
+	%>
+
+<div class="container-fluid" id="mainBox">
+		
+	<div class="d-flex flex-column align-items-center">
+		 
+		<h1 class="text-light pt-3 mb-5" style="font-family: 'Montserrat', sans-serif; font-weight: 900">See All Media List</h1>
+
+		<mytag:printmedialist list="${requestScope.mediaList}"/>
+
+		<% 
+		
+			int offset = (Integer)request.getAttribute("offset");
+			int limit = (Integer)request.getAttribute("limit");
+			int remaining = (Integer)request.getAttribute("remaining");
+			
+			/* agar database me ele limit se jada ya equal bache hai,
+			to hum ek baar me 5 row ko read kar sakte h,
+			no issue */
+			if(remaining != 0 && limit <= remaining) {
+				
+				offset+=5;
+				remaining-=5;
+				
+				request.setAttribute("remaining", remaining);
+				request.setAttribute("offset", offset);
+				out.println("<button class='btn btn-outline-light'><a href='get-list-media'>NEXT PAGE</a></button>");
+				System.out.println("first limit = "+limit+" remaining = "+remaining);
+				
+			}
+			
+			/* but agar limit > remaining,
+			it means that we will have to change limit to remaining,
+			means jitne ele bache utne hi element lekar aao */
+			else if(remaining != 0 && limit > remaining) {
+				
+				offset+=5;
+				limit = remaining;
+				remaining = 0;
+				
+				
+				request.setAttribute("limit", limit);
+				request.setAttribute("remaining", remaining);
+				request.setAttribute("offset", offset);
+				out.println("<button class='btn btn-outline-light'><a style='text-decoration: none;' href='get-list-media'>NEXT PAGE</a></button>");
+				System.out.println("second limit = "+limit+" remaining = "+remaining);
+			}
+			
+		%>
+		
+	</div>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
