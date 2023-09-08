@@ -2,6 +2,7 @@ package controllers;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
@@ -23,21 +24,28 @@ public class MediaListImageControllerServlet extends HttpServlet {
 		OutputStream outputStream = null;
 		try {
 			
-			response.setContentType("image/jpg");
+			response.setContentType("mime");
+			response.setHeader("keep-alive", "timeout=3600");
+			
 			String mediaId = request.getParameter("id");
 			ServletContext sc = request.getServletContext();
 			String commonPath = sc.getInitParameter("commonPath");
 			String actualPath = commonPath+"\\"+mediaId+"\\image.jpg";
-			inputStream = new FileInputStream(actualPath);
 			
+			File file = new File(actualPath);
+			
+			response.setContentLength((int)file.length());
+			
+			inputStream = new FileInputStream(file);
 			
 			outputStream = response.getOutputStream(); // returns ServletOutputStream object - to write binary data
 			
-			int ch;
+			int bytesRead = 0;
+			byte[] buffer = new byte[1024];
 			
-			while((ch = inputStream.read()) != -1) {
+			while((bytesRead = inputStream.read(buffer)) != -1) {
 				
-				outputStream.write(ch);
+				outputStream.write(buffer, 0, bytesRead);
 				
 			}
 			

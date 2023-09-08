@@ -36,7 +36,7 @@
   
   <context-param>
   	<param-name>commonPath</param-name>
-  	<param-value>F:\OTT\OTT-01\src\main\webapp\media</param-value>
+  	<param-value>F:\OTT\ott-project-3\OTT-01\src\main\webapp\media</param-value>
   </context-param>
   
 

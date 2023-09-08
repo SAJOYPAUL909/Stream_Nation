@@ -1,6 +1,8 @@
 package controllers;
 
 import java.io.File;
+
+
 import java.io.IOException;
 import dto.Media;
 import dto.MediaInfo;
@@ -159,10 +161,8 @@ public class UploadMediaInfoControllerServlet extends HttpServlet {
 								try {
 									
 									Date utilReleaseDate = dateFormatter.parse(strReleaseDate);
-									System.out.println("util date :"+utilReleaseDate);
 									miliseconds = utilReleaseDate.getTime();
 									sqlReleaseDate = new java.sql.Date(miliseconds);
-									System.out.println("date : "+sqlReleaseDate);
 								}
 								catch(ParseException p) {
 									System.out.println("UploadMediaInfoControllerServlet - ParseException");

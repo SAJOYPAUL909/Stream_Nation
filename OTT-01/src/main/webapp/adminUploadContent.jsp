@@ -134,7 +134,7 @@
                  switch(cause){
                  
                  	case "empty-name":
-                 		showAlert('Dear User!', 'empty media name!', 'error', 'Try Again');
+                 		sweetAlert('Dear User!', 'empty media name!', 'error', 'Try Again');
                  		break;
                  		
                  	case "empty-category":

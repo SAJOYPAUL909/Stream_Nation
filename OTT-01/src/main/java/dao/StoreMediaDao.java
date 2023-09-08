@@ -1,6 +1,7 @@
 package dao;
 import util.DBConnection;
 
+
 import java.sql.Statement;
 import dto.Media;
 import java.sql.PreparedStatement;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 import java.sql.ResultSet;
+import dto.Media;
 
 public class StoreMediaDao {
 
@@ -15,6 +17,9 @@ public class StoreMediaDao {
 	private static PreparedStatement ps2;
 	private static Statement st1;
 	private static PreparedStatement ps3;
+	private static PreparedStatement ps4;
+	private static PreparedStatement ps5;
+
 	
 	static {
 		
@@ -24,6 +29,10 @@ public class StoreMediaDao {
 			ps2 = DBConnection.getConnection().prepareStatement("select * from media limit ? offset ?");
 			st1 = DBConnection.getConnection().createStatement();
 			ps3 = DBConnection.getConnection().prepareStatement("select category, name from media where media_id = ?");
+			ps4 = DBConnection.getConnection().prepareStatement("select * from media where name like ?");
+			ps5 = DBConnection.getConnection().prepareStatement("update media set category = ? , name = ? where media_id = ?");
+			
+			
 			
 		}
 		catch(SQLException sq) {
@@ -35,6 +44,35 @@ public class StoreMediaDao {
 		
 	}
 	 
+	public static void updateMediaBasedOnMedia(Media media) throws SQLException {
+		
+		ps5.setString(getTotalNumberOfMediaLimit(), media.getCategory());
+		ps5.setString(2 , media.getName());
+		ps5.executeQuery();
+		
+	}
+	 
+	
+	 
+	public static List<Media> searchByName(String pattern) throws SQLException {
+		
+		ps4.setString(1, pattern+"%");
+		ResultSet rs = ps4.executeQuery();
+		List<Media> list = new ArrayList<>();
+		while(rs.next()) {
+			
+			String media_id = rs.getString(1);
+			String category = rs.getString(2);
+			String name = rs.getString(3);
+			Media media = new Media(media_id, category, name);
+			list.add(media);
+			
+		}
+		
+		return list;
+		
+	}
+	
 	public static Media getMediaInfo(String id) throws SQLException {
 		
 		ps3.setString(1, id);
