@@ -35,7 +35,7 @@ public class UploadMediaInfoControllerServlet extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		
 		String name = null;
-		String category = null;
+		String category = "";
 		String strRating = null;
 		String strLength = null;
 		String description = null;
@@ -57,7 +57,6 @@ public class UploadMediaInfoControllerServlet extends HttpServlet {
 			
 			try {
 				List<FileItem> items = upload.parseRequest(request);
-				System.out.println("items : "+items);
 				UUID uuid = UUID.randomUUID();
 				
 				for(FileItem item : items) {
@@ -110,11 +109,20 @@ public class UploadMediaInfoControllerServlet extends HttpServlet {
 								}
 								break;
 							case "category":
-								category = value;
-								if(category.equals("")) {
+								
+								if(value.equals("") || value == null) {
 									response.getWriter().println("empty-category");
 									return;
 								}
+									
+								else if(category.equals("")) {
+									category = value+",";
+								}
+								
+								else {
+									category = category + "," + value;
+								}
+								
 								break;
 							case "ratings":
 								strRating = value;
@@ -180,6 +188,7 @@ public class UploadMediaInfoControllerServlet extends HttpServlet {
 				}
 				
 				
+				System.out.println("category : "+category);
 				 Media media = new Media(mediaId, category, name);
 				 StoreMediaDao.storeMedia(media);
 				 

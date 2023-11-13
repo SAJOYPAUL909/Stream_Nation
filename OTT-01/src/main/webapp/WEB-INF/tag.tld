@@ -16,5 +16,25 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    
+    <tag>
+        <name>printMedia</name>
+        <tag-class>custometags.GetMediaOfDifferentCategory</tag-class>
+        <body-content>empty</body-content>
 
+        <attribute>
+            <name>category</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    
+    <tag>
+    
+    	<name>printBigBanner</name>
+    	<tag-class>custometags.GetBigBannerForIndexPage</tag-class>
+    	<body-content>empty</body-content>
+    
+    </tag>
+	
 </taglib>

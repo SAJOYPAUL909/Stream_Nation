@@ -32,12 +32,12 @@ public class PrintMediaListToJsp extends SimpleTagSupport {
 				 String servletSrc = "media-List-Image?id="+id;
 				 
 				 out.println("<img class='rounded' width='500px' src='"+servletSrc+"'/>");
-				 out.println("<li class='list-group-item fontOne bg-dark text-light'>"+media.
-				 getName()+"</li>");
-				 out.println("<li class='list-group-item fontOne bg-dark text-light'>"+media.
-				 getCategory()+"</li>");
+				 out.println("<p class='fontOne text-light'>"+media.
+				 getName()+"</p>");
+				 out.println("<p class='fontOne text-light'>"+media.
+				 getCategory()+"</p>");
 				 String servletSec1 = "get-all-info-media?id="+media.getMedia_id();
-				 out.println("<li class='list-group-item mb-5 fontOne rounded-bottom text-light bg-dark'><a href='"+servletSec1+"' class='btn btn-outline-light btn-sm'>More Details</a></li>");
+				 out.println("<p class='mb-5 fontOne rounded-bottom text-light'><a href='"+servletSec1+"' class='btn btn-outline-light btn-sm' style='width: 100%;'>More Details</a></p>");
 		 
 		 
 		 }

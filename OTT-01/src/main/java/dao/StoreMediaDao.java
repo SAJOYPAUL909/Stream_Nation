@@ -19,6 +19,8 @@ public class StoreMediaDao {
 	private static PreparedStatement ps3;
 	private static PreparedStatement ps4;
 	private static PreparedStatement ps5;
+	private static PreparedStatement ps6;
+	private static Statement ps7;
 
 	
 	static {
@@ -31,8 +33,8 @@ public class StoreMediaDao {
 			ps3 = DBConnection.getConnection().prepareStatement("select category, name from media where media_id = ?");
 			ps4 = DBConnection.getConnection().prepareStatement("select * from media where name like ?");
 			ps5 = DBConnection.getConnection().prepareStatement("update media set category = ? , name = ? where media_id = ?");
-			
-			
+			ps6 = DBConnection.getConnection().prepareStatement("select * from media where category = ?");
+			ps7 = DBConnection.getConnection().createStatement();
 			
 		}
 		catch(SQLException sq) {
@@ -43,6 +45,39 @@ public class StoreMediaDao {
 		}
 		
 	}
+	
+	public static String returnRandomMediaId() throws SQLException{
+		
+		ResultSet rs = st1.executeQuery("select media_id from media order by RAND() LIMIT 1;");
+		String randomMediaId = null;
+		while(rs.next()) {
+			randomMediaId = rs.getString(1);
+		}
+		
+		return randomMediaId;
+		
+	}
+	
+	
+	public static ArrayList<Media> getMediaObjectsAccordingToCategory(String category) throws SQLException{
+		
+		ps6.setString(1, category);
+		ResultSet rs = ps6.executeQuery();
+		ArrayList<Media> mediaList = new ArrayList<>();
+		while(rs.next()) {
+			
+			String mediaId = rs.getString(1);
+			String c = rs.getString(2);
+			String mediaName = rs.getString(3);
+			Media media = new Media(mediaId, c, mediaName);
+			mediaList.add(media);
+			
+		}
+		
+		return mediaList;
+		
+	}
+	
 	 
 	public static void updateMediaBasedOnMedia(Media media) throws SQLException {
 		
@@ -96,6 +131,8 @@ public class StoreMediaDao {
 		
 		ps2.setInt(1, limit);
 		ps2.setInt(2, offset);
+		
+		System.out.println(ps2.toString());
 		
 		ResultSet rs = ps2.executeQuery();
 		

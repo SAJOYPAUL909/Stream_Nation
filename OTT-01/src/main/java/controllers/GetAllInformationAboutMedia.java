@@ -22,6 +22,7 @@ public class GetAllInformationAboutMedia extends HttpServlet {
 
 	
 		String media_id = request.getParameter("id");
+			
 		try {
 			
 			Media media = StoreMediaDao.getMediaInfo(media_id);

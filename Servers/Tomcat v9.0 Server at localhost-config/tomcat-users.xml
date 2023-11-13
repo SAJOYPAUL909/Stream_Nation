@@ -53,4 +53,5 @@
     <user password="dcba" roles="manager-script,admin" username="abcd"/>
     <user password="dcba" roles="manager-gui,admin-gui,manager-script,admin" username="abcd"/>
     <user name="abcd" password="dcba" roles="admin-gui,manager-gui,manager-script,admin"/>
+    <user password="admin" roles="manager-script,admin" username="root"/>
 </tomcat-users>

@@ -32,7 +32,6 @@ public class UpdateMediaControllerServlet extends HttpServlet {
 			request.setAttribute("id", id);
 			rd.forward(request, response);
 			
-			
 		}
 		catch(SQLException s) {
 			

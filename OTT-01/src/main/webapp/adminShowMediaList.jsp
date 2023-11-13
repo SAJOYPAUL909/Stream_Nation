@@ -28,8 +28,7 @@
 	
 	.fontOne {
 	  font-family: 'Montserrat', sans-serif;
-	  font-style: italic;
-	  font-weight: 400;
+	  font-weight: 900;
 	}
 
 </style>

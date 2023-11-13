@@ -22,10 +22,15 @@ public class GetVideoBasedOnMediaIdControllerServlet extends HttpServlet {
 		response.setContentType("video/mp4");
 		
 		String id = request.getParameter("id");
+		
 		ServletContext context = request.getServletContext();
+		
 		String commonPath = context.getInitParameter("commonPath");
+		
 		String filePath = commonPath+File.separator+id+File.separator+"video.mp4";
+		
 		FileInputStream inputStream = null;
+		
 		ServletOutputStream outputStream = null;
 		
 		try {
@@ -44,7 +49,6 @@ public class GetVideoBasedOnMediaIdControllerServlet extends HttpServlet {
 				outputStream.write(buffer, 0, bytesRead);
 				
 			}
-			System.out.println("hy");
 			outputStream.flush();
 		}
 		catch(IOException io) {
