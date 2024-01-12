@@ -334,8 +334,6 @@
   			let form = document.getElementById("uploadForm");
   			let formData = new FormData(form);
   			
-  			console.log(formData);
-  			
   			$.ajax({
                 type: "POST",
                 url: "upload-user-profile",

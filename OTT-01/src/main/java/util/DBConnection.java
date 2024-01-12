@@ -37,7 +37,6 @@ public class DBConnection {
 			connection = DriverManager.getConnection(url, username, password);
 			System.out.println("driver loaded - connection opened successfully!");
 			
-			
 		}
 		catch(ClassNotFoundException cnf) {
 			System.out.println("init - DBConnection - ClassNotFoundException");

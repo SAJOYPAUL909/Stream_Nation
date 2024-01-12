@@ -20,7 +20,6 @@ public class GetBigBannerForIndexPage extends SimpleTagSupport{
 		HttpServletRequest request = (HttpServletRequest)pageContext.getRequest();
 		JspWriter out = context.getOut();
 		
-		
 		String mediaId = (String)request.getAttribute("randomMediaId");
 		Media media = (Media)request.getAttribute("media");
 		MediaInfo mediaInfo = (MediaInfo)request.getAttribute("mediaInfo");
